@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radio Tepeyac App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --azul: #4da6ff;
+      --gris: #1e1e1e;
+      --blanco: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #000;
+      color: var(--blanco);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .home-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .banner {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
+    .menu-button {
+      background: var(--gris);
+      border: 2px solid var(--azul);
+      padding: 1.2rem 2rem;
+      font-size: 1.3rem;
+      color: var(--blanco);
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 300px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .menu-button:hover {
+      background: var(--azul);
+      color: #000;
+    }
+
+    .icon {
+      font-size: 2rem;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icons a {
+      color: var(--blanco);
+      font-size: 1.8rem;
+      transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+      color: var(--azul);
+    }
+
+    .back-btn {
+      margin-top: 2rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background: var(--gris);
+      color: white;
+      border: 1px solid var(--azul);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    #radioPanel .glow-ring {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 5px solid var(--azul);
+      animation: glow 2s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+    }
+
+    #radioPanel .glow-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 15px var(--azul); }
+      50% { box-shadow: 0 0 30px var(--azul); }
+    }
+
+    .controls {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .controls i {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .volume {
+      width: 150px;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .countdown {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: var(--azul);
+    }
+  </style>
+</head>
+<body>
+  <div id="homeScreen" class="screen active">
+    <div class="home-container">
+      <img src="https://res.cloudinary.com/dtrg7mbgi/image/upload/v1751351640/banner_qic36x.jpg" alt="Banner Radio Tepeyac" class="banner">
+      <div class="countdown">Faltan <span id="timer"></span> PARA LOS 500 AÑOS DE LAS APARICIONES DE LA VIRGEN DE GUADALUPE.</div>
+      <button class="menu-button" onclick="goTo('radioPanel')">
+        <i class="fas fa-headphones icon"></i> Escuchar Radio
+      </button>
+      <button class="menu-button" onclick="goTo('tvPanel')">
+        <i class="fas fa-tv icon"></i> Transmisión en Vivo
+     <button class="menu-button" onclick="goTo('cateQuizPanel')">
+  <i class="fas fa-gamepad icon"></i> CateQuiz - Aprende tu Fe
+</button>
+      <div class="social-icons">
+        <a href="https://facebook.com/profile.php?id=100007031445504" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="https://wa.me/529811016637" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://miparroquiadijital.space/" target="_blank"><i class="fas fa-globe"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="radioPanel" class="screen">
+    <h1>Radio Tepeyac</h1>
+    <div class="glow-ring" onclick="togglePlay()">
+      <img src="https://res.cloudinary.com/dtrg7mbgi/image/upload/v1751348222/logo_ngn9vp.png" alt="Logo Radio Tepeyac">
+    </div>
+    <div class="controls">
+      <i class="fas fa-play" onclick="togglePlay()" title="Reproducir"></i>
+      <i class="fas fa-stop" onclick="stopAudio()" title="Detener"></i>
+      <input type="range" class="volume" min="0" max="1" step="0.1" value="1" onchange="setVolume(this.value)">
+    </div>
+    <div class="countdown">Faltan <span id="timer-radio"></span> PARA LOS 500 AÑOS DE LAS APARICIONES DE LA VIRGEN DE GUADALUPE.</div>
+    <div class="footer">© 2025 Radio Tepeyac</div>
+    <button class="back-btn" onclick="goTo('homeScreen')">⬅ Volver</button>
+    <audio id="audio" src="https://c19.radioboss.fm:8169/stream"></audio>
+  </div>
+
+  <div id="tvPanel" class="screen">
+    <h1>🔴 Transmisión en Vivo</h1>
+    <iframe 
+      src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fparroquia.de.guadalupe.bonfil.campeche%2Fvideos%2F1254034126355140%2F&width=1280" 
+      width="100%" 
+      height="720" 
+      style="border:none;overflow:hidden" 
+      scrolling="no" 
+      frameborder="0" 
+      allowfullscreen="true" 
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+    </iframe>
+    <div class="countdown">Faltan <span id="timer-tv"></span> PARA LOS 500 AÑOS DE LAS APARICIONES DE LA VIRGEN DE GUADALUPE.</div>
+    <div class="footer">Transmitiendo desde Facebook Live</div>
+    <button class="back-btn" onclick="goTo('homeScreen')">⬅ Volver</button>
+  </div>
+
+  <div id="webPanel" class="screen">
+    <h1>🌐 Mi Parroquia Digital</h1>
+    <iframe 
+      src="https://miparroquiadijital.space"
+      width="100%" 
+      height="720" 
+      style="border:none;" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+    <div class="countdown">Faltan <span id="timer-web"></span> PARA LOS 500 AÑOS DE LAS APARICIONES DE LA VIRGEN DE GUADALUPE.</div>
+    <div class="footer">Visita nuestro sitio oficial</div>
+    <button class="back-btn" onclick="goTo('homeScreen')">⬅ Volver</button>
+  </div>
+
+  <script>
+    function goTo(panelId) {
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      document.getElementById(panelId).classList.add('active');
+    }
+
+    const audio = document.getElementById("audio");
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    function stopAudio() {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    function setVolume(val) {
+      audio.volume = val;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const eventDate = new Date("December 12, 2031 00:00:00");
+      const diff = eventDate - now;
+
+      if (diff <= 0) {
+        document.querySelectorAll('[id^="timer"]').forEach(el => el.textContent = "¡Hoy es el día!");
+        return;
+      }
+
+      const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+      const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      const result = `${years} años, ${days} días, ${hours}h ${minutes}m ${seconds}s`;
+      document.querySelectorAll('[id^="timer"]').forEach(el => el.textContent = result);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
+
